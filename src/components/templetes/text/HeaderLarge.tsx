@@ -3,6 +3,7 @@ import React from 'react'
 
 const HeaderLarge: React.FC<HeaderLargeProps> = ({
     children,
+    fontSize,
     color,
     padding,
     lineHeight,
@@ -12,7 +13,7 @@ const HeaderLarge: React.FC<HeaderLargeProps> = ({
     return (
         <>
             <h1
-                className={`text-4xl font-semibold ${color} ${padding} ${lineHeight} ${fontFamily} ${textAlign}`}
+                className={`${color || ''} ${fontSize || ''} ${padding || ''} ${lineHeight || ''} ${fontFamily || ''} ${textAlign || ''}`}
             >
                 {children}
             </h1>
