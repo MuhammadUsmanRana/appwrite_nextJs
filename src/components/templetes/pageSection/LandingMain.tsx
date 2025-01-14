@@ -1,32 +1,30 @@
-import React from 'react';
-import HeaderLarge from '../text/HeaderLarge';
-import HeaderMedium from '../text/HeaderMedium';
-import HeaderSmall from '../text/HeaderSmall';
-import ParaghraphMedium from '../paragraph/paragraphMedium';
-import ParaghraphSmall from '../paragraph/paragraphSmall';
+"use client";
+
+import React, { useEffect } from 'react';
+import useLogin from '@/components/customHooks/useLogin';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/types/typs';
+import Header from '@/components/shared/Header';
+import Footer from '@/components/shared/Footer';
+import MainContainer from '../MainContainer/MainContainer';
 
 const LandingMain = () => {
-    return (
-        <section className="landing-main bg-primary p-4">
-            <div>
-                <HeaderLarge
-                    color="color-primary"
-                    fontSize="text-4xl"
-                    padding="pb-2"
-                    lineHeight="leading-tight"
-                    fontFamily='font-ibmplexserif-bold'
-                    textAlign="text-center"
-                    
-                >
-                    HeaderLarge
-                </HeaderLarge>
+    // const dispatch = useDispatch();
+    const loading = useSelector((state: RootState) => state.auth.loading);
+    const { doFetchCurrentUser } = useLogin();
 
-                <HeaderMedium color="text-yellow-500">HeaderMedium</HeaderMedium>
-                <HeaderSmall color="text-green-500">HeaderSmall</HeaderSmall>
-                <ParaghraphMedium color="text-blue-500">ParaghraphMedium</ParaghraphMedium>
-                <ParaghraphSmall color="text-pink-500">ParaghraphSmall</ParaghraphSmall>
-            </div>
-        </section>
+    useEffect(() => {
+        doFetchCurrentUser();
+    }, []);
+
+    return (
+        <>
+            <Header />
+            <MainContainer display='flex' justifyContent='justify-center' flexDirection='flex-col' >
+                {loading ? <div>Loading...</div> : <div>Loaded</div>}
+            </MainContainer>
+            <Footer />
+        </>
     );
 };
 

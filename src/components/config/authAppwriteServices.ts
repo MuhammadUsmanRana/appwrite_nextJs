@@ -60,6 +60,14 @@ export class AuthService {
             console.error(error);
         }
     };
+
+    async deleteAccount(userId: string) {
+        try {
+            await this.account.deleteIdentity(userId);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 };
 
 

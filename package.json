@@ -1,7 +1,9 @@
 {
-  "name": "soyummy-trivia-gen-2",
+  "name": "appwrite-nextjs-project",
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,20 +12,23 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",
-    "appwrite": "^14.0.1",
-    "next": "15.0.3",
-    "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106",
-    "react-redux": "^9.2.0"
+    "appwrite": "^16.1.0",
+    "formik": "^2.4.6",
+    "next": "^15.1.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/json5": "^0.0.30",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "autoprefixer": "^10.4.20",
-    "eslint": "^8",
-    "eslint-config-next": "15.0.3",
-    "postcss": "^8.4.49",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.4",
+    "postcss": "^8.5.0",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
   }
