@@ -23,21 +23,8 @@
 }
 
 @font-face {
-  font-family: "play-fair-display";
+  font-family: play-fair-display;
   src: url('../../public/assest/fonts/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf');
-}
-
-
-:root {
-  --font-play-fair-display: "play-fair-display";
-  --font-ibmplexserif-bold: "IBMPlexSerif-Bold";
-  --font-ibmplexserif-regular: "IBMPlexSerif-Regular";
-  --font-ibmplexserif-medium: "IBMPlexSerif-Medium";
-  --font-ibmplexserif-light: "IBMPlexSerif-Light";
-  --basic-primary-color: #171717;
-  --basic-secondary-color: #ffffff;
-  --background: #ffffff;
-  --foreground: #171717;
 }
 
 
@@ -67,6 +54,19 @@
 
 .color-secondary {
   color: var(--basic-secondary-color);
+}
+
+
+:root {
+  --font-play-fair-display: "play-fair-display";
+  --font-ibmplexserif-bold: "IBMPlexSerif-Bold";
+  --font-ibmplexserif-regular: "IBMPlexSerif-Regular";
+  --font-ibmplexserif-medium: "IBMPlexSerif-Medium";
+  --font-ibmplexserif-light: "IBMPlexSerif-Light";
+  --basic-primary-color: #171717;
+  --basic-secondary-color: #ffffff;
+  --background: #ffffff;
+  --foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {

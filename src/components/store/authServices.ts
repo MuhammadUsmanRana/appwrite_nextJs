@@ -6,7 +6,7 @@ const initialState = {
     token: null,
     isAuthenticated: false,
     loading: true,
-    userData: null
+    userData: [],
 };
 
 const authSlice = createSlice({
@@ -24,7 +24,7 @@ const authSlice = createSlice({
             state.status = false;
             state.isAuthenticated = false;
             state.loading = false;
-            state.userData = null;
+            state.userData = [];
         }
     }
 

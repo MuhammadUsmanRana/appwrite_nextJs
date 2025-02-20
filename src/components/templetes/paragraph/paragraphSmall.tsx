@@ -7,12 +7,14 @@ const ParagraphSmall: React.FC<ParagraphSmallProps> = ({
     padding,
     lineHeight,
     fontFamily,
-    textAlign
+    textAlign,
+    justify,
+    margin,
 }) => {
     return (
         <>
             <p
-                className={`text-sm font-semibold ${color} ${padding} ${lineHeight} ${fontFamily} ${textAlign}`}
+                className={`text-sm font-normal flex ${color} ${padding} ${lineHeight} ${fontFamily} ${textAlign} ${justify} ${margin}`}
             >
                 {children}
             </p>

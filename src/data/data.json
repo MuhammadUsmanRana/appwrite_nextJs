@@ -1,0 +1,44 @@
+[
+    {
+        "$id": "1",
+        "user_id": "1",
+        "name": "John Doe1",
+        "description": "A spacious room with modern amenities, suitable for large conferences and events.",
+        "sqft": 3000,
+        "capacity": 100,
+        "location": "Building A, 3rd Floor",
+        "address": "555 California St, San Francisco, CA 94109, New York",
+        "amenities": "Wifi, AC, Video Conference, Kitchen, Sound System",
+        "availability": "9 AM - 5 PM",
+        "price_per_hour": 100,
+        "image": "/assest/images/meeting-room-1.jpg"
+    },
+    {
+        "$id": "2",
+        "user_id": "2",
+        "name": "John Doe 2",
+        "description": "A spacious room with modern amenities, suitable for large conferences and events.",
+        "sqft": 3000,
+        "capacity": 100,
+        "location": "Building A, 3rd Floor",
+        "address": "555 California St, San Francisco, CA 94109, New York",
+        "amenities": "Wifi, AC, Video Conference, Kitchen, Sound System",
+        "availability": "9 AM - 5 PM",
+        "price_per_hour": 100,
+        "image": "/assest/images/meeting-room-2.jpg"
+    },
+    {
+        "$id": "3",
+        "user_id": "3",
+        "name": "John Doe 3",
+        "description": "A spacious room with modern amenities, suitable for large conferences and events.",
+        "sqft": 3000,
+        "capacity": 100,
+        "location": "Building A, 3rd Floor",
+        "address": "555 California St, San Francisco, CA 94109, New York",
+        "amenities": "Wifi, AC, Video Conference, Kitchen, Sound System",
+        "availability": "9 AM - 5 PM",
+        "price_per_hour": 100,
+        "image": "/assest/images/meeting-room-3.jpg"
+    }
+]

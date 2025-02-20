@@ -1,7 +1,7 @@
-import { HeaderMediumProps } from '@/types/typs'
+import { HeadingMediumProps } from '@/types/typs'
 import React from 'react'
 
-const HeaderMedium: React.FC<HeaderMediumProps> = ({
+const HeadingMedium: React.FC<HeadingMediumProps> = ({
     children,
     color,
     padding,
@@ -20,4 +20,4 @@ const HeaderMedium: React.FC<HeaderMediumProps> = ({
     )
 }
 
-export default HeaderMedium;
+export default HeadingMedium;

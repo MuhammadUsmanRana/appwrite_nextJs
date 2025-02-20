@@ -1,4 +1,4 @@
-export type HeaderLargeProps = {
+export type HeadingLargeProps = {
     children: React.ReactNode;
     color?: string;
     padding?: string;
@@ -8,7 +8,7 @@ export type HeaderLargeProps = {
     fontSize?: string;
 };
 
-export type HeaderMediumProps = {
+export type HeadingMediumProps = {
     children: React.ReactNode;
     color?: string;
     padding?: string;
@@ -17,7 +17,7 @@ export type HeaderMediumProps = {
     textAlign?: string;
 };
 
-export type HeaderSmallProps = {
+export type HeadingSmallProps = {
     children: React.ReactNode;
     color?: string;
     padding?: string;
@@ -42,6 +42,8 @@ export type ParagraphSmallProps = {
     lineHeight?: string;
     fontFamily?: string;
     textAlign?: string;
+    justify?: string;
+    margin?: string;
 };
 
 export type createAccountProps = {
@@ -125,8 +127,10 @@ export type InputProps = {
     label?: string;
     id?: string | undefined;
     value: string;
-    error?: string;
+    error?: string | undefined | null | boolean;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    touched?: boolean,
+    onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 export type PassworInputProps = {
@@ -140,4 +144,21 @@ export type PassworInputProps = {
     value: string;
     error?: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    touched?: boolean,
+    onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+}
+
+export type LoginSignupButtonProps = {
+    children: React.ReactNode;
+    className?: string;
+    onClick?: () => void;
+    padding?: string;
+    margin?: string;
+    width?: string;
+    height?: string;
+    borderRadius?: string;
+    boxShadow?: string;
+    type?: 'button' | 'submit' | 'reset';
+    disabled?: boolean;
+    loading?: boolean;
 }

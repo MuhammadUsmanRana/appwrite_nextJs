@@ -4,7 +4,9 @@ import { useSelector } from "react-redux";
 
 const useLogin = () => {
     const storeActions = useSelector((state: RootState) => state.auth);
+    // console.log("🚀 ~ useLogin ~ storeActions:", storeActions)
     // const router = useRouter();
+
 
     const createAccount = ({ name, email, password }: createAccountProps) => {
         authAppwriteServices.createAccount({ name, email, password }).then(() => {
@@ -23,10 +25,10 @@ const useLogin = () => {
         try {
             const response = await authAppwriteServices.getCurrentUser();
             console.log("🚀 ~ doFetchCurrentUser ~ response:", response)
-            if (response) {
-                return response;
-            } else {
+            if (!response) {
                 throw new Error('User account not created');
+            } else {
+                return response;
             }
         } catch (error) {
             console.log("🚀 ~ file: useLogin ~ doFetchCurrentUser ~ error", error);

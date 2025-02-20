@@ -43,6 +43,7 @@ export class AuthService {
     async getCurrentUser() {
         try {
             const userAccount = await this.account.get();
+            console.log("🚀 ~ AuthService ~ getCurrentUser ~ userAccount:", userAccount)
             if (userAccount) {
                 return userAccount;
             } else {

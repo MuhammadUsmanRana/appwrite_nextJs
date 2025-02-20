@@ -1,7 +1,7 @@
-import { HeaderLargeProps } from '@/types/typs';
+import { HeadingLargeProps } from '@/types/typs';
 import React from 'react'
 
-const HeaderLarge: React.FC<HeaderLargeProps> = ({
+const HeadingLarge: React.FC<HeadingLargeProps> = ({
     children,
     fontSize,
     color,
@@ -21,4 +21,4 @@ const HeaderLarge: React.FC<HeaderLargeProps> = ({
     )
 };
 
-export default HeaderLarge;
+export default HeadingLarge;

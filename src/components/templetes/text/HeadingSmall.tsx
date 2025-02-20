@@ -1,7 +1,7 @@
-import { HeaderSmallProps } from '@/types/typs'
+import { HeadingSmallProps } from '@/types/typs'
 import React from 'react'
 
-const HeaderSmall: React.FC<HeaderSmallProps> = ({
+const HeadingSmall: React.FC<HeadingSmallProps> = ({
     children,
     color,
     padding,
@@ -20,4 +20,4 @@ const HeaderSmall: React.FC<HeaderSmallProps> = ({
     )
 }
 
-export default HeaderSmall
+export default HeadingSmall
