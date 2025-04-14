@@ -11,7 +11,6 @@ import HeadingLarge from '../text/HeadingLarge';
 const LandingMain = () => {
     const loading = useSelector((state: RootState) => state.auth.loading);
     const fetchCurrentUser = useSelector((state: RootState) => state.auth.isAuthenticated);
-    console.log("🚀 ~ LandingMain ~ loading:", loading)
     const { doFetchCurrentUser } = useLogin();
 
     useEffect(() => {
@@ -20,21 +19,25 @@ const LandingMain = () => {
 
     return (
         <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <HeadingLarge>
+            <HeadingLarge fontFamily='font-bold' color='color-primary' padding='p-2' textAlign='text-center' fontSize='text-3xl'>
                 Available Rooms
             </HeadingLarge>
-            <MainContainer display='flex' justifyContent='justify-center' flexDirection='flex-col' >
-                {/* {loading ? <div>Loading...</div> : <div>Loaded</div>} */}
-                {
-                    rooms.length > 0 ? (
-                        rooms.map((room: any) => (
-                            <RoomsCard key={room.$id} room={room} />
-                        ))
-                    ) : (
-                        <h3>No rooms available at the moment</h3>
-                    )
-                }
+            <MainContainer display="flex" justifyContent="justify-center" flexDirection='flex-col'>
+                {loading ? (
+                    <div>Loading...</div>
+                ) : !fetchCurrentUser ? (
+                    <div>Please login to see your rooms</div>
+                ) : (
+                    <>
+                        {rooms.length > 0 ? (
+                            rooms.map((room: any) => <RoomsCard key={room.$id} room={room} />)
+                        ) : (
+                            <h3>No rooms available at the moment</h3>
+                        )}
+                    </>
+                )}
             </MainContainer>
+
         </main>
     );
 };

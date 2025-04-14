@@ -1,12 +1,11 @@
-import { createAccountProps, loginProps, RootState } from "@/types/typs";
+import { createAccountProps, loginProps } from "@/types/typs";
 import authAppwriteServices from "../config/authAppwriteServices";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import { login } from "../store/authServices";
 
 
 const useLogin = () => {
-    const storeActions = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch();
 
 
@@ -43,7 +42,7 @@ const useLogin = () => {
     const doFetchCurrentUser = async () => {
         try {
             const response = await authAppwriteServices.getCurrentUser();
-            console.log("🚀 ~ doFetchCurrentUser ~ response:", response)
+            // console.log("🚀 ~ doFetchCurrentUser ~ response:", response)
             if (response?.success === false) {
                 throw new Error('User account not created');
             } else {
@@ -52,7 +51,7 @@ const useLogin = () => {
                 return response;
             }
         } catch (error) {
-            console.log("🚀 ~ file: useLogin ~ doFethCurcrentUser ~ error", error);
+            console.error("🚀 ~ file: useLogin ~ doFethCurcrentUser ~ error", error);
         }
     }
 

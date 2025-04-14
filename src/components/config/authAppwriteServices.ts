@@ -22,7 +22,7 @@ export class AuthService {
                 email,
                 password,
                 name
-            );            
+            );
             if (userAccount && userAccount.$id) {
                 Cookies.set("userId", userAccount.$id, { expires: 2 });
                 Cookies.set("providerUid", userAccount.email);
@@ -39,7 +39,7 @@ export class AuthService {
         }
     };
 
-    async login(email: string, password: string) {
+    async login({ email, password }: loginProps) {
         try {
             const user = await this.account.createEmailPasswordSession(
                 email,
