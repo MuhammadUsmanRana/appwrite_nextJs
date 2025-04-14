@@ -13,12 +13,14 @@ import { useRouter } from 'next/navigation';
 import { Routes } from '@/utils/routes';
 import ParagraphSmall from '../paragraph/paragraphSmall';
 import Link from 'next/link';
+import useLogin from '@/components/customHooks/useLogin';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const { doLoginUser } = useLogin();
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <div className="flex items-center justify-center">
@@ -33,31 +35,27 @@ const LoginPage = () => {
           </HeaderMedium>
           <Formik
             initialValues={{
-              name: '',
               email: '',
               password: '',
             }}
             validationSchema={loginSchema}
-            onSubmit={async (values) => {
-              console.log(values);
+            onSubmit={async (values, { setSubmitting }) => {
               setLoading(true);
               setError(null);
               try {
-                const response = await authAppwriteServices.login({ email: values.email, password: values.password });
+                const response = await doLoginUser({
+                  email: values.email,
+                  password: values.password
+                });
                 if (response) {
-                  const userDataLogIn = await authAppwriteServices.getCurrentUser();
-                  if (userDataLogIn) {
-                    dispatch(login(userDataLogIn));
-                    router.push(Routes.home);
-                  } else {
-                    throw new Error('User account not created');
-                  }
-                } else {
-                  throw new Error('User account not created');
+                  router.push(Routes.home);
                 }
               } catch (error: any) {
-                setError(error.message);
-
+                console.error("🚀 ~ onSubmit error:", error);
+                setError(error.message || 'Failed to create account');
+              } finally {
+                setLoading(false);
+                setSubmitting(false);
               }
             }}
           >
@@ -98,6 +96,7 @@ const LoginPage = () => {
                 >
                   {loading ? 'Loading...' : 'Sign In'}
                 </LoginSignupButton>
+                {error && <ParagraphSmall justify='justify-center' color="text-red-500">{error}</ParagraphSmall>}
                 <ParagraphSmall justify='justify-end'>
                   Don't have an account?
                   <Link href={Routes.signup} className='text-blue-500 cursor-pointer underline px-2'>
@@ -107,7 +106,6 @@ const LoginPage = () => {
               </form>
             )}
           </Formik>
-          {error && <ParagraphSmall justify='justify-center' color="text-red-500">{error}</ParagraphSmall>}
         </div>
       </div>
     </main >

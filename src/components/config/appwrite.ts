@@ -16,11 +16,18 @@ export class AppwriteServices {
     }
 
     async createPost({
-        title,
-        content,
+        $id,
+        user_id,
+        name,
+        description,
+        sqft,
+        capacity,
+        location,
+        address,
+        amenities,
+        availability,
+        price_per_hour,
         image,
-        status,
-        userId
     }: createPostProps) {
         try {
             return await this.dataBases.createDocument(
@@ -28,11 +35,18 @@ export class AppwriteServices {
                 config.appwriteCollectionId,
                 ID.unique(),
                 {
-                    title,
-                    content,
-                    image,
-                    status,
-                    userId
+                    $id,
+                    user_id,
+                    name,
+                    description,
+                    sqft,
+                    capacity,
+                    location,
+                    address,
+                    amenities,
+                    availability,
+                    price_per_hour,
+                    image
                 });
         } catch (error) {
             console.error(error);
@@ -40,24 +54,37 @@ export class AppwriteServices {
     };
 
     async updatePost({
-        title,
-        content,
+        $id,
+        user_id,
+        name,
+        description,
+        sqft,
+        capacity,
+        location,
+        address,
+        amenities,
+        availability,
+        price_per_hour,
         image,
-        status,
-        userId,
-        postId
     }: updatePostProps) {
         try {
             return await this.dataBases.updateDocument(
                 config.appwriteDataBaseId,
                 config.appwriteCollectionId,
-                postId,
+                user_id,
                 {
-                    title,
-                    content,
+                    $id,
+                    user_id,
+                    name,
+                    description,
+                    sqft,
+                    capacity,
+                    location,
+                    address,
+                    amenities,
+                    availability,
+                    price_per_hour,
                     image,
-                    status,
-                    userId
                 });
         } catch (error) {
             console.error(error);

@@ -26,7 +26,7 @@ const DetailsMain = ({ id }: { id: string }) => {
                 <div className="flex flex-col sm:flex-row sm:space-x-6">
                     <Image
                         src={rooms.image}
-                        alt={rooms.name}
+                        alt={rooms.name || "default-alt"}
                         className="w-full sm:w-1/3 h-64 object-cover rounded-lg"
                         width={500}
                         height={500}

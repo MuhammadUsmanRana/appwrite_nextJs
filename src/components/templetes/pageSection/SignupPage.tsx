@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useEffect } from 'react';
 import InputField from '../form/InputField';
 import PasswordField from '../form/PasswordField';
 import { Formik, ErrorMessage } from 'formik';
@@ -13,11 +13,16 @@ import authAppwriteServices from '@/components/config/authAppwriteServices';
 import { login } from '@/components/store/authServices';
 import ParagraphSmall from '../paragraph/paragraphSmall';
 import Link from 'next/link';
+import useLogin from '@/components/customHooks/useLogin';
 
 const SignupPage = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const [loading, setLoading] = React.useState<boolean>(false);
+    const [error, setError] = React.useState<string | null>(null);
+    const {
+        createAccount,
+      } = useLogin();
     return (
         <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <div className="flex items-center justify-center">
@@ -29,6 +34,11 @@ const SignupPage = () => {
                     >
                         Sign Up
                     </HeaderMedium>
+                    {error && (
+                        <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+                            {error}
+                        </div>
+                    )}
                     <Formik
                         initialValues={{
                             name: '',
@@ -37,29 +47,20 @@ const SignupPage = () => {
                         }}
                         validationSchema={SignupSchema}
                         onSubmit={async (values, { setSubmitting }) => {
-                            console.log("🚀 ~ onSubmit={ ~ values:", values)
                             setLoading(true);
+                            setError(null);
                             try {
-                                const response = await authAppwriteServices.createAccount({
+                                const response = await createAccount({
                                     name: values.name,
                                     email: values.email,
                                     password: values.password
                                 });
-                                console.log("🚀 ~ response:", response)
                                 if (response) {
-                                    const userDataSignUp = await authAppwriteServices.getCurrentUser();
-                                    console.log("🚀 ~ onSubmit={ ~ userData:", userDataSignUp)
-                                    if (userDataSignUp) {
-                                        dispatch(login(userDataSignUp));
-                                        router.push(Routes.login);
-                                    } else {
-                                        throw new Error('User account not created');
-                                    }
-                                } else {
-                                    throw new Error('User account not created');
+                                    router.push(Routes.login);
                                 }
                             } catch (error: any) {
-                                console.error("🚀 ~ onSubmit={ ~ error:", error);
+                                console.error("🚀 ~ onSubmit error:", error);
+                                setError(error.message || 'Failed to create account');
                             } finally {
                                 setLoading(false);
                                 setSubmitting(false);
@@ -107,11 +108,12 @@ const SignupPage = () => {
                                 <LoginSignupButton
                                     type="submit"
                                     loading={loading}
-                                    disabled={false}
+                                    disabled={!isValid || loading}
                                     className="my-custom-class"
                                     padding="py-4"
                                     width="w-auto"
                                     boxShadow="shadow-lg"
+                                    onClick={handleSubmit}
                                 >
                                     Sign Up
                                 </LoginSignupButton>

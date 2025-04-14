@@ -10,6 +10,7 @@ import HeadingLarge from '../text/HeadingLarge';
 
 const LandingMain = () => {
     const loading = useSelector((state: RootState) => state.auth.loading);
+    const fetchCurrentUser = useSelector((state: RootState) => state.auth.isAuthenticated);
     console.log("🚀 ~ LandingMain ~ loading:", loading)
     const { doFetchCurrentUser } = useLogin();
 

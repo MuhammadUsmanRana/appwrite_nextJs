@@ -47,6 +47,7 @@ export type ParagraphSmallProps = {
 };
 
 export type createAccountProps = {
+    userId?: string,
     name: string,
     email: string,
     password: string
@@ -58,23 +59,37 @@ export type loginProps = {
 }
 
 export type createPostProps = {
-    title: string,
-    content: string | null,
-    image: string | null,
-    status: string,
-    userId: string
+    $id: number,
+    user_id: number,
+    name: string,
+    description: string,
+    sqft: string,
+    capacity: string,
+    location: string,
+    address: string,
+    amenities: string,
+    availability: string,
+    price_per_hour: string,
+    image: string,
 }
 
 export type updatePostProps = {
-    title: string,
-    content: string | null,
-    image: string | null,
-    status: string,
-    userId: string,
-    postId: string
+    $id: number,
+    user_id: string,
+    name: string,
+    description: string,
+    sqft: string,
+    capacity: string,
+    location: string,
+    address: string,
+    amenities: string,
+    availability: string,
+    price_per_hour: string,
+    image: string,
 }
 
 export interface AuthState {
+    user: any;
     userData: {
         id: string;
         name: string;
