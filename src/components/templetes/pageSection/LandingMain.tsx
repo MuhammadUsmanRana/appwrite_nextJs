@@ -1,20 +1,33 @@
 "use client";
 import React, { useEffect } from 'react';
 import useLogin from '@/components/customHooks/useLogin';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/types/typs';
 import MainContainer from '../MainContainer/MainContainer';
-import rooms from "@/data/data.json";
 import RoomsCard from '../card/RoomsCard';
 import HeadingLarge from '../text/HeadingLarge';
+import { AppwriteServices } from '@/components/config/appwrite';
+import { getRooms } from '@/components/store/roomsServices';
+import { AppDispatch } from '@/components/store/store';
 
 const LandingMain = () => {
     const loading = useSelector((state: RootState) => state.auth.loading);
+    const Allrooms = useSelector((state: RootState) => state.rooms.rooms);
     const fetchCurrentUser = useSelector((state: RootState) => state.auth.isAuthenticated);
     const { doFetchCurrentUser } = useLogin();
+    const dispatch = useDispatch<AppDispatch>();
+
+    const fetchRooms = async () => {
+        try {
+            return await dispatch(getRooms());
+        } catch (error) {
+            return console.error("Error fetching rooms:", error);
+        }
+    };
 
     useEffect(() => {
         doFetchCurrentUser();
+        fetchRooms();
     }, []);
 
     return (
@@ -29,8 +42,8 @@ const LandingMain = () => {
                     <div>Please login to see your rooms</div>
                 ) : (
                     <>
-                        {rooms.length > 0 ? (
-                            rooms.map((room: any) => <RoomsCard key={room.$id} room={room} />)
+                        {Allrooms.length > 0 ? (
+                            Allrooms.map((room: any) => <RoomsCard key={room.$id} room={room} />)
                         ) : (
                             <h3>No rooms available at the moment</h3>
                         )}

@@ -53,20 +53,9 @@ export class AppwriteServices {
         }
     };
 
-    async updatePost({
-        $id,
-        user_id,
-        name,
-        description,
-        sqft,
-        capacity,
-        location,
-        address,
-        amenities,
-        availability,
-        price_per_hour,
-        image,
-    }: updatePostProps) {
+    async updatePost(roomId: string, {
+    $id, user_id, name, description, sqft, capacity, location, address, amenities, availability, price_per_hour, image,
+}: updatePostProps) {
         try {
             return await this.dataBases.updateDocument(
                 config.appwriteDataBaseId,
@@ -103,12 +92,13 @@ export class AppwriteServices {
         }
     };
 
-    async getPosts(queries = [Query.equal("status", "active")]) {
+    // queries = [Query.equal("status", "active")]
+    async getPosts() {
         try {
             return await this.dataBases.listDocuments(
                 config.appwriteDataBaseId,
                 config.appwriteCollectionId,
-                queries
+                // queries
             );
         } catch (error) {
             console.error(error);

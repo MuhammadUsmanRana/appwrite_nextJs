@@ -104,6 +104,7 @@ export interface AuthState {
 }
 
 export interface RootState {
+    rooms: any;
     auth: AuthState;
 }
 
@@ -177,3 +178,23 @@ export type LoginSignupButtonProps = {
     disabled?: boolean;
     loading?: boolean;
 }
+
+
+export type Document = {
+    $id: string;
+    $collectionId?: string;
+    $databaseId?: string;
+    $createdAt?: string;
+    $updatedAt?: string;
+    $permissions?: string[];
+    name: string;
+    description: string;
+    sqft: string;
+    capacity: string;
+    location: string;
+    address: string;
+    amenities: string;
+    availability: string;
+    price_per_hour: string;
+    image: string;
+};
