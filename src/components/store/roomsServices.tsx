@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { WritableDraft } from "immer";
 import { AppwriteServices } from "../config/appwrite";
 import { createPostProps, updatePostProps } from "../../types/typs";
 import { Document } from "../../types/typs"; // Ensure this import matches your actual type definition
@@ -9,7 +10,7 @@ export const createRoom = createAsyncThunk(
     "rooms/createRoom",
     async (data: createPostProps) => {
         try {
-            const response = await appwriteServices.createPost(data);
+            const response = await appwriteServices.createRoom(data);
             return response;
         } catch (error: any) {
             console.error(error.response.data.message);
@@ -21,7 +22,20 @@ export const getRooms = createAsyncThunk(
     "rooms/getRooms",
     async () => {
         try {
-            const response = await appwriteServices.getPosts();
+            const response = await appwriteServices.getRooms();
+            return response;
+        } catch (error: any) {
+            console.error(error.response.data.message);
+        }
+    }
+);
+
+export const getRoomById = createAsyncThunk(
+    "rooms/getRoomById",
+    async (id: string) => {
+        console.log("🚀 ~ id:", id)
+        try {
+            const response = await appwriteServices.getRoomById(id);
             return response;
         } catch (error: any) {
             console.error(error.response.data.message);
@@ -33,7 +47,7 @@ export const updateRoom = createAsyncThunk(
     "rooms/updateRoom",
     async ({ roomId, data }: { roomId: string; data: updatePostProps }) => {
         try {
-            const response = await appwriteServices.updatePost(roomId, data);
+            const response = await appwriteServices.updateRoom(roomId, data);
             return response;
         } catch (error: any) {
             console.error(error.response.data.message);
@@ -45,7 +59,7 @@ export const deleteRoom = createAsyncThunk(
     "rooms/deleteRoom",
     async (roomId: string) => {
         try {
-            const response = await appwriteServices.deletePost(roomId);
+            const response = await appwriteServices.deleteRoom(roomId);
             return response;
         } catch (error: any) {
             console.error(error.response.data.message);
@@ -58,10 +72,12 @@ const initialState: {
     rooms: Document[];
     loading: boolean;
     error: string | null;
+    selectedRoom: Document | null;
 } = {
     rooms: [],
     loading: false,
     error: null,
+    selectedRoom: null,
 };
 
 const roomsSlice = createSlice({
@@ -108,6 +124,18 @@ const roomsSlice = createSlice({
                 }
             })
             .addCase(getRooms.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            .addCase(getRoomById.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getRoomById.fulfilled, (state, action) => {
+                console.log("🚀 ~ .addCase ~ action:", action)
+                state.loading = false;
+                state.selectedRoom = action.payload as WritableDraft<Document> | null;
+              })              
+            .addCase(getRoomById.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             })

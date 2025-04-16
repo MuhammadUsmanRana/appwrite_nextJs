@@ -3,11 +3,12 @@ import Link from 'next/link'
 import React from 'react'
 
 const RoomsCard = ({ room }: { room: any }) => {
+    console.log("🚀 ~ RoomsCard ~ room:", room)
     return (
         <div className="bg-white shadow rounded-lg p-4 mt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
             <div className="flex flex-col sm:flex-row sm:space-x-4">
                 <Image
-                    src={room.image || "/images/room.jpg"}
+                    src={`/assest/images/${room.image}`}
                     alt={room.name || "Room Image"}
                     priority={true}
                     className="w-full sm:w-32 sm:h-32 mb-3 sm:mb-0 object-cover rounded-lg"

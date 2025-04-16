@@ -1,5 +1,5 @@
-import React from 'react'
-import RoomsData from '@/data/data.json';
+"use client";
+import React, { useEffect } from 'react'
 import HeadingLarge from '../text/HeadingLarge';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -7,9 +7,27 @@ import ParagraphSmall from '../paragraph/paragraphSmall';
 import { FaChevronLeft } from "react-icons/fa"
 import BookingForm from '../form/BookingForm';
 import { Routes } from '@/utils/routes';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/types/typs';
+import { getRooms } from '@/components/store/roomsServices';
+import { AppDispatch } from '@/components/store/store';
 
 const DetailsMain = ({ id }: { id: string }) => {
-    const rooms = RoomsData.find((item) => item.$id === id)
+    const Allrooms = useSelector((state: RootState) => state.rooms.rooms);
+    console.log("🚀 ~ DetailsMain ~ Allrooms:", Allrooms)
+    const dispatch = useDispatch<AppDispatch>();
+    const fetchRooms = async () => {
+        try {
+            return dispatch(getRooms());
+        } catch (error) {
+            return console.error("Error fetching rooms:", error);
+        }
+    };
+    useEffect(() => {
+        fetchRooms();
+    }, []);
+    const rooms = Allrooms.find((item: any) => item.$id === id);
+    console.log("🚀 ~ DetailsMain ~ rooms:", rooms)
     return (
         <React.Fragment>
             {
@@ -28,7 +46,7 @@ const DetailsMain = ({ id }: { id: string }) => {
                         </Link>
                         <div className="flex flex-col sm:flex-row sm:space-x-6">
                             <Image
-                                src={rooms.image}
+                                src={rooms.image || "/assest/images/meeting-room-1.jpg"}
                                 alt={rooms.name || "default-alt"}
                                 className="w-full sm:w-1/3 h-64 object-cover rounded-lg"
                                 width={500}

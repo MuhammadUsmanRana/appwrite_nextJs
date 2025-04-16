@@ -15,7 +15,7 @@ export class AppwriteServices {
         this.bucket = new Storage(this.client);
     }
 
-    async createPost({
+    async createRoom({
         $id,
         user_id,
         name,
@@ -53,7 +53,7 @@ export class AppwriteServices {
         }
     };
 
-    async updatePost(roomId: string, {
+    async updateRoom(roomId: string, {
     $id, user_id, name, description, sqft, capacity, location, address, amenities, availability, price_per_hour, image,
 }: updatePostProps) {
         try {
@@ -80,7 +80,7 @@ export class AppwriteServices {
         }
     };
 
-    async deletePost(postId: string) {
+    async deleteRoom(postId: string) {
         try {
             return await this.dataBases.deleteDocument(
                 config.appwriteDataBaseId,
@@ -93,12 +93,24 @@ export class AppwriteServices {
     };
 
     // queries = [Query.equal("status", "active")]
-    async getPosts() {
+    async getRooms() {
         try {
             return await this.dataBases.listDocuments(
                 config.appwriteDataBaseId,
                 config.appwriteCollectionId,
                 // queries
+            );
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    async getRoomById(id: string) {
+        try {
+            return await this.dataBases.getDocument(
+                config.appwriteDataBaseId,
+                config.appwriteCollectionId,
+                id
             );
         } catch (error) {
             console.error(error);
