@@ -26,8 +26,8 @@ const useLogin = () => {
 
     const doLoginUser = async ({ email, password }: loginProps) => {
         try {
-            const data = await authAppwriteServices.login(email, password);
-            // console.log("🚀 ~ doLoginUser ~ data:", data);
+            const data = await authAppwriteServices.login({ email, password });
+            console.log("🚀 ~ doLoginUser ~ data:", data);
             if (!data) {
                 throw new Error('Failed to login');
             }

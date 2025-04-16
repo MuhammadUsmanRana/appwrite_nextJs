@@ -9,6 +9,7 @@ import HeadingLarge from '../text/HeadingLarge';
 import { AppwriteServices } from '@/components/config/appwrite';
 import { getRooms } from '@/components/store/roomsServices';
 import { AppDispatch } from '@/components/store/store';
+import HeadingSmall from '../text/HeadingSmall';
 
 const LandingMain = () => {
     const loading = useSelector((state: RootState) => state.auth.loading);
@@ -39,7 +40,7 @@ const LandingMain = () => {
                 {loading ? (
                     <div>Loading...</div>
                 ) : !fetchCurrentUser ? (
-                    <div>Please login to see your rooms</div>
+                    <HeadingSmall >Please login to see your rooms</HeadingSmall>
                 ) : (
                     <>
                         {Allrooms.length > 0 ? (
