@@ -2,7 +2,7 @@ import { Client, Databases, ID, Query, Storage } from "appwrite";
 import config from "./config";
 import { createPostProps, updatePostProps } from "@/types/typs";
 
-export class AppwriteServices {
+export class AppwriteService {
     client = new Client()
     dataBases;
     bucket;
@@ -164,6 +164,5 @@ export class AppwriteServices {
     };
 
 };
-const AuthService = new AppwriteServices();
 
-export default AuthService;
+// export default AppWriteServices;

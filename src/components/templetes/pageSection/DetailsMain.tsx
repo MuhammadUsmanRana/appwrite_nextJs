@@ -8,13 +8,12 @@ import { FaChevronLeft } from "react-icons/fa"
 import BookingForm from '../form/BookingForm';
 import { Routes } from '@/utils/routes';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/types/typs';
-import { getRooms } from '@/components/store/roomsServices';
-import { AppDispatch } from '@/components/store/store';
+import { getRooms } from '@/components/store/roomsSlices';
+import { AppDispatch, RootState } from '@/components/store/store';
 
 const DetailsMain = ({ id }: { id: string }) => {
     const Allrooms = useSelector((state: RootState) => state.rooms.rooms);
-    console.log("🚀 ~ DetailsMain ~ Allrooms:", Allrooms)
+    // console.log("🚀 ~ DetailsMain ~ Allrooms:", Allrooms)
     const dispatch = useDispatch<AppDispatch>();
     const fetchRooms = async () => {
         try {
@@ -27,7 +26,7 @@ const DetailsMain = ({ id }: { id: string }) => {
         fetchRooms();
     }, []);
     const rooms = Allrooms.find((item: any) => item.$id === id);
-    console.log("🚀 ~ DetailsMain ~ rooms:", rooms)
+    // console.log("🚀 ~ DetailsMain ~ rooms:", rooms)
     return (
         <React.Fragment>
             {

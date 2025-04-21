@@ -24,6 +24,7 @@ export type HeadingSmallProps = {
     lineHeight?: string;
     fontFamily?: string;
     textAlign?: string;
+    className?: string;
 };
 
 export type ParagraphMediumProps = {
@@ -197,4 +198,31 @@ export type Document = {
     availability: string;
     price_per_hour: string;
     image: string;
+};
+
+
+// export type userProps = {
+//     $id: string;
+//     name: string;
+//     email: string;
+//     password: string;
+//     isAuthenticated: boolean;
+//     status: boolean;
+// } | null;
+
+// Define the actual shape of user info returned by Appwrite
+export type AppwriteUser = {
+    $id: string;
+    name: string;
+    email: string;
+    // add any other properties you expect from Appwrite's user
+};
+
+// Main auth state
+export type userProps = {
+    status: boolean;
+    user: AppwriteUser | null;
+    token: string | null;
+    isAuthenticated: boolean;
+    loading: boolean;
 };

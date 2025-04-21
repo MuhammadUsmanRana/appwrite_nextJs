@@ -1,16 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer";
-import { AppwriteServices } from "../config/appwrite";
 import { createPostProps, updatePostProps } from "../../types/typs";
 import { Document } from "../../types/typs"; // Ensure this import matches your actual type definition
+import { AppwriteService } from "../config/appwrite";
 
 
-const appwriteServices = new AppwriteServices();
+const AppWriteServices = new AppwriteService();
 export const createRoom = createAsyncThunk(
     "rooms/createRoom",
-    async (data: createPostProps) => {
+    async (data: createPostProps, { rejectWithValue }) => {
         try {
-            const response = await appwriteServices.createRoom(data);
+            const response = await AppWriteServices.createRoom(data);
+            console.log("🚀 ~ response:", response)
+            if (!response) {
+                return rejectWithValue("Error creating room");
+            }
             return response;
         } catch (error: any) {
             console.error(error.response.data.message);
@@ -20,10 +24,13 @@ export const createRoom = createAsyncThunk(
 
 export const getRooms = createAsyncThunk(
     "rooms/getRooms",
-    async () => {
+    async (_, { rejectWithValue }) => {
         try {
-            const response = await appwriteServices.getRooms();
-            return response;
+            const response = await AppWriteServices.getRooms();
+            if (!response?.documents) {
+                return rejectWithValue("Error fetching rooms");
+            }
+            return response?.documents as Document[];
         } catch (error: any) {
             console.error(error.response.data.message);
         }
@@ -32,11 +39,13 @@ export const getRooms = createAsyncThunk(
 
 export const getRoomById = createAsyncThunk(
     "rooms/getRoomById",
-    async (id: string) => {
-        console.log("🚀 ~ id:", id)
+    async (id: string, { rejectWithValue }) => {
         try {
-            const response = await appwriteServices.getRoomById(id);
-            return response;
+            const response = await AppWriteServices.getRoomById(id);
+            if (!response) {
+                return rejectWithValue("Error fetching room by ID");
+            }
+            return response as Document;
         } catch (error: any) {
             console.error(error.response.data.message);
         }
@@ -47,7 +56,7 @@ export const updateRoom = createAsyncThunk(
     "rooms/updateRoom",
     async ({ roomId, data }: { roomId: string; data: updatePostProps }) => {
         try {
-            const response = await appwriteServices.updateRoom(roomId, data);
+            const response = await AppWriteServices.updateRoom(roomId, data);
             return response;
         } catch (error: any) {
             console.error(error.response.data.message);
@@ -59,7 +68,7 @@ export const deleteRoom = createAsyncThunk(
     "rooms/deleteRoom",
     async (roomId: string) => {
         try {
-            const response = await appwriteServices.deleteRoom(roomId);
+            const response = await AppWriteServices.deleteRoom(roomId);
             return response;
         } catch (error: any) {
             console.error(error.response.data.message);
@@ -92,7 +101,6 @@ const roomsSlice = createSlice({
             .addCase(createRoom.fulfilled, (state, action) => {
                 state.loading = false;
                 const payload = action.payload;
-                console.log("🚀 ~ .addCase ~ payload:", payload)
                 // &&
                 //     payload.name &&
                 //     payload.description &&
@@ -117,11 +125,7 @@ const roomsSlice = createSlice({
             })
             .addCase(getRooms.fulfilled, (state, action) => {
                 state.loading = false;
-                if (action.payload) {
-                    state.rooms = action.payload.documents as Document[];
-                } else {
-                    state.rooms = [];
-                }
+                state.rooms = action.payload || [];
             })
             .addCase(getRooms.rejected, (state, action) => {
                 state.loading = false;
@@ -131,10 +135,9 @@ const roomsSlice = createSlice({
                 state.loading = true;
             })
             .addCase(getRoomById.fulfilled, (state, action) => {
-                console.log("🚀 ~ .addCase ~ action:", action)
                 state.loading = false;
                 state.selectedRoom = action.payload as WritableDraft<Document> | null;
-              })              
+            })
             .addCase(getRoomById.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;

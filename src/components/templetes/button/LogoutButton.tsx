@@ -1,7 +1,7 @@
 "use client";
 
 import authAppwriteServices from '@/components/config/authAppwriteServices';
-import { logout } from '@/components/store/authServices';
+import { logout } from '@/components/store/authSlices';
 import React from 'react'
 import { useDispatch } from 'react-redux';
 

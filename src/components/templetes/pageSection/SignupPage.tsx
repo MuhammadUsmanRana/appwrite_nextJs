@@ -9,22 +9,24 @@ import HeaderMedium from '../text/HeadingMedium';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { Routes } from '@/utils/routes';
-import authAppwriteServices from '@/components/config/authAppwriteServices';
-import { login } from '@/components/store/authServices';
+// import authAppwriteServices from '@/components/config/authAppwriteServices';
+// import { login } from '@/components/store/authSlices';
 import ParagraphSmall from '../paragraph/paragraphSmall';
 import Link from 'next/link';
-import useLogin from '@/components/customHooks/useLogin';
+import { createAccount } from '@/components/store/authSlices';
+import { AppDispatch } from '@/components/store/store';
+// import useLogin from '@/components/customHooks/useLogin';
 
 const SignupPage = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [error, setError] = React.useState<string | null>(null);
-    const {
-        createAccount,
-      } = useLogin();
+    // const {
+    //     createAccount,
+    //   } = useLogin();
     return (
-        <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 h-screen flex items-center justify-center">
             <div className="flex items-center justify-center">
                 <div className="bg-white shadow-xl rounded-lg p-6 w-full max-w-sm mt-20">
                     <HeaderMedium
@@ -50,11 +52,11 @@ const SignupPage = () => {
                             setLoading(true);
                             setError(null);
                             try {
-                                const response = await createAccount({
+                                const response = await dispatch(createAccount({
                                     name: values.name,
                                     email: values.email,
                                     password: values.password
-                                });
+                                }))
                                 if (response) {
                                     router.push(Routes.login);
                                 }

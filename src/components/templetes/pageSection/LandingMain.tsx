@@ -1,35 +1,33 @@
 "use client";
 import React, { useEffect } from 'react';
-import useLogin from '@/components/customHooks/useLogin';
+// import useLogin from '@/components/customHooks/useLogin';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/types/typs';
 import MainContainer from '../MainContainer/MainContainer';
 import RoomsCard from '../card/RoomsCard';
 import HeadingLarge from '../text/HeadingLarge';
-import { AppwriteServices } from '@/components/config/appwrite';
-import { getRooms } from '@/components/store/roomsServices';
+import { getRooms } from '@/components/store/roomsSlices';
 import { AppDispatch } from '@/components/store/store';
 import HeadingSmall from '../text/HeadingSmall';
+import { doFetchCurrentUser } from '@/components/store/authSlices';
 
 const LandingMain = () => {
-    const loading = useSelector((state: RootState) => state.auth.loading);
+    const loading = useSelector((state: RootState) => state.rooms.loading);
     const Allrooms = useSelector((state: RootState) => state.rooms.rooms);
-    const fetchCurrentUser = useSelector((state: RootState) => state.auth.isAuthenticated);
-    const { doFetchCurrentUser } = useLogin();
     const dispatch = useDispatch<AppDispatch>();
 
-    const fetchRooms = async () => {
+    const fetchRoomsWithAuth = async () => {
         try {
-            return await dispatch(getRooms());
+            await dispatch(getRooms());
+            await dispatch(doFetchCurrentUser());
         } catch (error) {
             return console.error("Error fetching rooms:", error);
         }
     };
 
     useEffect(() => {
-        doFetchCurrentUser();
-        fetchRooms();
-    }, []);
+        fetchRoomsWithAuth();
+    }, [dispatch]);
 
     return (
         <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -38,15 +36,18 @@ const LandingMain = () => {
             </HeadingLarge>
             <MainContainer display="flex" justifyContent="justify-center" flexDirection='flex-col'>
                 {loading ? (
-                    <div>Loading...</div>
-                ) : !fetchCurrentUser ? (
-                    <HeadingSmall >Please login to see your rooms</HeadingSmall>
+                    <>
+                        <div className="flex justify-center items-center h-screen">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+                            <HeadingSmall>Loading...</HeadingSmall>
+                        </div>
+                    </>
                 ) : (
                     <>
                         {Allrooms.length > 0 ? (
                             Allrooms.map((room: any) => <RoomsCard key={room.$id} room={room} />)
                         ) : (
-                            <h3>No rooms available at the moment</h3>
+                            <HeadingSmall >No rooms available at the moment</HeadingSmall>
                         )}
                     </>
                 )}

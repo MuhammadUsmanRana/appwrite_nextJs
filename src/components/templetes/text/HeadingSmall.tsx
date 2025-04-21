@@ -7,12 +7,13 @@ const HeadingSmall: React.FC<HeadingSmallProps> = ({
     padding,
     lineHeight,
     fontFamily,
-    textAlign
+    textAlign,
+    className
 }) => {
     return (
         <>
             <h3
-                className={`text-2xl font-semibold ${color} ${padding} ${lineHeight} ${fontFamily} ${textAlign}`}
+                className={`text-2xl font-semibold ${color} ${padding} ${lineHeight} ${fontFamily} ${textAlign} ${className}`}
             >
                 {children}
             </h3>

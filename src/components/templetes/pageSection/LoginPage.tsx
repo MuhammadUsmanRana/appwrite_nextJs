@@ -7,24 +7,26 @@ import { loginSchema } from '@/schemas/authSchemas';
 import LoginSignupButton from '../button/LoginSignupButton';
 import HeaderMedium from '../text/HeadingMedium';
 import { useDispatch } from 'react-redux';
-import authAppwriteServices from '@/components/config/authAppwriteServices';
-import { login } from '@/components/store/authServices';
 import { useRouter } from 'next/navigation';
 import { Routes } from '@/utils/routes';
 import ParagraphSmall from '../paragraph/paragraphSmall';
 import Link from 'next/link';
-import useLogin from '@/components/customHooks/useLogin';
+// import useLogin from '@/components/customHooks/useLogin';
+import { AppDispatch } from '@/components/store/store';
+import { loginUser } from '@/components/store/authSlices';
+import Swal from 'sweetalert2'
+
 
 const LoginPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const { doLoginUser } = useLogin();
+  // const { doLoginUser } = useLogin();
   return (
-    <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 h-screen flex items-center justify-center">
       <div className="flex items-center justify-center">
-        <div className="bg-white shadow-xl rounded-lg p-6 w-full max-w-sm mt-20">
+        <div className="bg-white shadow-xl rounded-lg p-6 w-full max-w-sm">
 
           <HeaderMedium
             padding='p-2'
@@ -43,19 +45,38 @@ const LoginPage = () => {
               setLoading(true);
               setError(null);
               try {
-                const response = await doLoginUser({
-                  email: values.email,
-                  password: values.password
-                });
-                if (response) {
+                const resposeForm = await dispatch(loginUser(values));
+                if (!resposeForm.payload) {
+                  setLoading(false);
+                  Swal.fire({
+                    title: 'Error!',
+                    text: 'Do you want to continue',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                  })
+                  if ('error' in resposeForm) {
+                    setError(resposeForm.error.message || 'An unknown error occurred');
+                  }
+                } else {
+                  const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                      toast.onmouseenter = Swal.stopTimer;
+                      toast.onmouseleave = Swal.resumeTimer;
+                    }
+                  });
+                  Toast.fire({
+                    icon: "success",
+                    title: "Signed in successfully"
+                  });
                   router.push(Routes.home);
                 }
-              } catch (error: any) {
-                console.error("🚀 ~ onSubmit error:", error);
-                setError(error.message || 'Failed to create account');
-              } finally {
-                setLoading(false);
-                setSubmitting(false);
+              } catch (error) {
+
               }
             }}
           >

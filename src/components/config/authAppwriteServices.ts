@@ -4,7 +4,7 @@ import { createAccountProps, loginProps } from "@/types/typs";
 import Cookies from "js-cookie";
 
 
-export class AuthService {
+export class AuthAppwriteService {
     client = new Client();
     account;
 
@@ -27,7 +27,11 @@ export class AuthService {
                 Cookies.set("userId", userAccount.$id, { expires: 2 });
                 Cookies.set("providerUid", userAccount.email);
                 return userAccount;
+            } else {
+                console.error("User account creation failed:", userAccount);
+                return null;
             }
+
         } catch (error: any) {
             console.error("Error details:", {
                 message: error.message,
@@ -39,12 +43,16 @@ export class AuthService {
         }
     };
 
-    async login({ email, password }: loginProps) {
+    async login(email: string, password: string) {
         try {
-            const user = await this.account.createEmailPasswordSession(
-                email,
-                password
-            );
+            const existingUser = await this.account.get();
+            if (existingUser && existingUser.$id) {
+                // Already logged in
+                return existingUser;
+            }
+            await this.account.createEmailPasswordSession(email, password);
+            const user = await this.account.get();
+            console.log("🚀 ~ AuthAppwriteService ~ login ~ user:", user)
             return user;
         } catch (error: any) {
             console.error("Login error:", error);
@@ -55,27 +63,38 @@ export class AuthService {
     async getCurrentUser() {
         try {
             const userAccount = await this.account.get();
+            if (!userAccount) {
+                console.error("User account not found");
+                return null;
+            }
             const response = {
                 success: true,
                 user: userAccount,
             }
+            return response;
+        } catch (error: any) {
+            if (error.code === 401) {
+                return {
+                    success: false,
+                    user: null,
+                };
+            }
+        }
+    };
+
+    async logout() {
+        try {
+            const response = await this.account.deleteSessions();
             return response;
         } catch (error) {
             console.error(error);
         }
     };
 
-    async logout() {
+    async deleteUser(userId: string) {
         try {
-            await this.account.deleteSessions();
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    async deleteAccount(userId: string) {
-        try {
-            await this.account.deleteIdentity(userId);
+            const response = await this.account.deleteIdentity(userId);
+            return response;
         } catch (error) {
             console.error(error);
         }
@@ -91,8 +110,3 @@ export class AuthService {
         }
     }
 };
-
-
-const authAppwriteServices = new AuthService();
-
-export default authAppwriteServices;
