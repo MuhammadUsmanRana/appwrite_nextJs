@@ -5,19 +5,19 @@ export default function HeroSection() {
       <section className="relative h-screen w-full overflow-hidden">
         {/* Background Image */}
         <img
-          src={IMAGES.MEETING_ROOM_THREE}// Replace with your actual image path
+          src={`${IMAGES.MEETING_ROOM_ONE}?quality=40`}// Replace with your actual image path
           alt="Room preview"
           className="absolute top-0 left-0 w-full h-full object-cover"
         />
   
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+        {/* <div className="absolute inset-0 bg-black bg-opacity-60"></div> */}
   
         {/* Content */}
         <div className="relative z-10 max-w-6xl mx-auto px-6 py-24 flex flex-col justify-center h-full text-white">
           <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
             Find your <br />
-            happy place.
+            meeting places.
           </h1>
           <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-xl">
             Book the perfect Wander with amazing views, modern workstations, restful beds,
@@ -26,9 +26,9 @@ export default function HeroSection() {
   
           <div className="flex gap-4 flex-wrap">
             <button className="bg-white text-black font-semibold px-6 py-3 rounded-full shadow hover:bg-gray-200 transition">
-              Start your search
+              Book Now
             </button>
-            <button className="flex items-center gap-2 border border-white text-white px-6 py-3 rounded-full hover:bg-white hover:text-black transition">
+            {/* <button className="flex items-center gap-2 border border-white text-white px-6 py-3 rounded-full hover:bg-white hover:text-black transition">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -44,7 +44,7 @@ export default function HeroSection() {
                 />
               </svg>
               Watch video
-            </button>
+            </button> */}
           </div>
         </div>
       </section>

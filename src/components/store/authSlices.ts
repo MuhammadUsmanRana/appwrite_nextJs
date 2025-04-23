@@ -10,14 +10,16 @@ export const createAccount = createAsyncThunk(
     async ({ name, email, password }: createAccountProps, { rejectWithValue }) => {
         try {
             const response = await authAppwriteServices.createAccount({ name, email, password });
-            console.log("🚀 ~ createAccount ~ response:", response)
             if (!response) {
                 return rejectWithValue("Error creating account");
             }
             return response;
-        } catch (error) {
+        } catch (error: any) {
             console.error("Create account error:", error);
-            throw error;
+            return rejectWithValue({
+                success: false,
+                message: error?.message || "Unknown error occurred during account creation.",
+            });
         }
     }
 );
@@ -27,17 +29,17 @@ export const loginUser = createAsyncThunk(
     async ({ email, password }: loginProps, { rejectWithValue }) => {
         try {
             const response = await authAppwriteServices.login(email, password);
-            if (!response) {
-                return rejectWithValue("Error logging in");
+            if (!response.success) {
+                return rejectWithValue(response.message);
             }
             return response;
-        } catch (error) {
+        } catch (error: any) {
             console.error("Login error:", error);
-            throw error;
+            return rejectWithValue(error?.message || "Login failed");
         }
-
     }
 );
+
 export const doFetchCurrentUser = createAsyncThunk(
     "auth/fetchCurrentUser",
     async (_, { rejectWithValue }) => {
@@ -60,7 +62,6 @@ export const deleteUser = createAsyncThunk(
     async (userId: string, { rejectWithValue }) => {
         try {
             const response = await authAppwriteServices.deleteUser(userId);
-            console.log("🚀 ~ deleteUser ~ response:", response)
             if (response === undefined) {
                 return rejectWithValue("Error deleting user");
             }
@@ -77,7 +78,6 @@ export const logoutUser = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const response = await authAppwriteServices.logout();
-            console.log("🚀 ~ logoutUser ~ response:", response)
             if (response === undefined) {
                 return rejectWithValue("Error logging out");
             }
@@ -89,8 +89,6 @@ export const logoutUser = createAsyncThunk(
     }
 );
 
-
-
 const initialState: userProps = {
     status: false,
     user: null,
@@ -98,7 +96,6 @@ const initialState: userProps = {
     isAuthenticated: false,
     loading: true,
 };
-
 const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -113,7 +110,7 @@ const authSlice = createSlice({
                 state.status = true;
                 state.isAuthenticated = true;
                 state.loading = false;
-                state.user = action.payload;
+                state.user = (action.payload as any)?.user ?? action.payload;
             })
             .addCase(createAccount.rejected, (state) => {
                 state.status = false;
@@ -129,7 +126,7 @@ const authSlice = createSlice({
                 state.status = true;
                 state.isAuthenticated = true;
                 state.loading = false;
-                state.user = action.payload
+                state.user = (action.payload as any)?.user ?? action.payload;
             })
             .addCase(loginUser.rejected, (state) => {
                 state.status = false;

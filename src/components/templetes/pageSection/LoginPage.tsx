@@ -22,7 +22,17 @@ const LoginPage = () => {
   const router = useRouter();
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState<boolean>(false);
-  // const { doLoginUser } = useLogin();
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 5000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    }
+  });
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 h-screen flex items-center justify-center">
       <div className="flex items-center justify-center">
@@ -41,42 +51,30 @@ const LoginPage = () => {
               password: '',
             }}
             validationSchema={loginSchema}
-            onSubmit={async (values, { setSubmitting }) => {
+            onSubmit={async (values) => {
               setLoading(true);
-              setError(null);
               try {
-                const resposeForm = await dispatch(loginUser(values));
-                if (!resposeForm.payload) {
+                const response = await dispatch(loginUser(values));
+                const payload = response as { payload: { message: string }, error?: { message: string } };
+                if (payload.error) {
                   setLoading(false);
-                  Swal.fire({
-                    title: 'Error!',
-                    text: 'Do you want to continue',
-                    icon: 'error',
-                    confirmButtonText: 'Cool'
-                  })
-                  if ('error' in resposeForm) {
-                    setError(resposeForm.error.message || 'An unknown error occurred');
-                  }
-                } else {
-                  const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top-end",
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                      toast.onmouseenter = Swal.stopTimer;
-                      toast.onmouseleave = Swal.resumeTimer;
-                    }
-                  });
                   Toast.fire({
-                    icon: "success",
-                    title: "Signed in successfully"
+                    icon: 'error',
+                    text: payload.error.message,
+                  });
+                } else {
+                  Toast.fire({
+                    icon: 'success',
+                    text: payload.payload.message,
                   });
                   router.push(Routes.home);
                 }
               } catch (error) {
-
+                console.error("🚀 ~ onSubmit ~ error:", error)
+                Toast.fire({
+                  icon: 'error',
+                  text: (error as { message: string })?.message || 'An unknown error occurred',
+                });
               }
             }}
           >

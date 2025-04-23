@@ -9,22 +9,27 @@ import HeaderMedium from '../text/HeadingMedium';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { Routes } from '@/utils/routes';
-// import authAppwriteServices from '@/components/config/authAppwriteServices';
-// import { login } from '@/components/store/authSlices';
 import ParagraphSmall from '../paragraph/paragraphSmall';
 import Link from 'next/link';
 import { createAccount } from '@/components/store/authSlices';
 import { AppDispatch } from '@/components/store/store';
-// import useLogin from '@/components/customHooks/useLogin';
+import Swal from 'sweetalert2';
 
 const SignupPage = () => {
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
     const [loading, setLoading] = React.useState<boolean>(false);
-    const [error, setError] = React.useState<string | null>(null);
-    // const {
-    //     createAccount,
-    //   } = useLogin();
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
     return (
         <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 h-screen flex items-center justify-center">
             <div className="flex items-center justify-center">
@@ -36,11 +41,6 @@ const SignupPage = () => {
                     >
                         Sign Up
                     </HeaderMedium>
-                    {error && (
-                        <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
-                            {error}
-                        </div>
-                    )}
                     <Formik
                         initialValues={{
                             name: '',
@@ -48,24 +48,32 @@ const SignupPage = () => {
                             password: '',
                         }}
                         validationSchema={SignupSchema}
-                        onSubmit={async (values, { setSubmitting }) => {
+                        onSubmit={async (values) => {
                             setLoading(true);
-                            setError(null);
                             try {
                                 const response = await dispatch(createAccount({
                                     name: values.name,
                                     email: values.email,
                                     password: values.password
-                                }))
-                                if (response) {
+                                })) as { payload: { success: boolean, message?: string } };
+                                if (!response.payload.success) {
+                                    Toast.fire({
+                                        icon: 'error',
+                                        text: response.payload.message || 'An unknown error occurred',
+                                    });
+                                } else {
+                                    Toast.fire({
+                                        icon: 'success',
+                                        text: response.payload.message || 'Account created successfully',
+                                    });
                                     router.push(Routes.login);
                                 }
                             } catch (error: any) {
-                                console.error("🚀 ~ onSubmit error:", error);
-                                setError(error.message || 'Failed to create account');
-                            } finally {
-                                setLoading(false);
-                                setSubmitting(false);
+                                console.error("🚀 ~ onSubmit={ ~ error:", error)
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: error?.message || 'An unknown error occurred',
+                                });
                             }
                         }}
                     >

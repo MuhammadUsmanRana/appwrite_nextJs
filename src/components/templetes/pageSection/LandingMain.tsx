@@ -16,18 +16,10 @@ const LandingMain = () => {
     const Allrooms = useSelector((state: RootState) => state.rooms.rooms);
     const dispatch = useDispatch<AppDispatch>();
 
-    const fetchRoomsWithAuth = async () => {
-        try {
-            await dispatch(getRooms());
-            await dispatch(doFetchCurrentUser());
-        } catch (error) {
-            return console.error("Error fetching rooms:", error);
-        }
-    };
-
     useEffect(() => {
-        fetchRoomsWithAuth();
-    }, [dispatch]);
+        dispatch(doFetchCurrentUser());
+        dispatch(getRooms());
+    }, []);
 
     return (
         <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
