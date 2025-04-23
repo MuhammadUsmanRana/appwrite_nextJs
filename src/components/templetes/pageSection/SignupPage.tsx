@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect } from 'react';
+import React from 'react';
 import InputField from '../form/InputField';
 import PasswordField from '../form/PasswordField';
-import { Formik, ErrorMessage } from 'formik';
+import { Formik } from 'formik';
 import { SignupSchema } from '@/schemas/authSchemas';
 import LoginSignupButton from '../button/LoginSignupButton';
 import HeaderMedium from '../text/HeadingMedium';
@@ -62,6 +62,7 @@ const SignupPage = () => {
                                         text: response.payload.message || 'An unknown error occurred',
                                     });
                                 } else {
+                                    setLoading(false);
                                     Toast.fire({
                                         icon: 'success',
                                         text: response.payload.message || 'Account created successfully',
@@ -69,7 +70,6 @@ const SignupPage = () => {
                                     router.push(Routes.login);
                                 }
                             } catch (error: any) {
-                                console.error("🚀 ~ onSubmit={ ~ error:", error)
                                 Toast.fire({
                                     icon: 'error',
                                     text: error?.message || 'An unknown error occurred',

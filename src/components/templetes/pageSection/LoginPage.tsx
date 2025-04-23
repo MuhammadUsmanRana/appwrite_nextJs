@@ -54,23 +54,23 @@ const LoginPage = () => {
             onSubmit={async (values) => {
               setLoading(true);
               try {
-                const response = await dispatch(loginUser(values));
-                const payload = response as { payload: { message: string }, error?: { message: string } };
-                if (payload.error) {
+                const response = await dispatch(loginUser(values)) as { payload: { success: boolean, message?: string } };
+                if (!response.payload.success) {
                   setLoading(false);
                   Toast.fire({
                     icon: 'error',
-                    text: payload.error.message,
+                    text: typeof response.payload === 'string'
+                      ? response.payload
+                      : response.payload?.message || 'Login failed',
                   });
                 } else {
                   Toast.fire({
                     icon: 'success',
-                    text: payload.payload.message,
+                    text: response.payload.message || 'Login successful',
                   });
                   router.push(Routes.home);
                 }
               } catch (error) {
-                console.error("🚀 ~ onSubmit ~ error:", error)
                 Toast.fire({
                   icon: 'error',
                   text: (error as { message: string })?.message || 'An unknown error occurred',
